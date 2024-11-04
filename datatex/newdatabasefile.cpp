@@ -166,6 +166,8 @@ NewDatabaseFile::NewDatabaseFile(QWidget *parent, DTXFile *fileinfo, int mode) :
             currentSubSection = ui->SubSections->selectionModel()->selectedRows()[0].data().toString();
         }
     });
+
+    metadata->Database.setDBInfo(DataTex::CurrentFilesDataBase);
 }
 
 NewDatabaseFile::~NewDatabaseFile()
@@ -793,15 +795,19 @@ void NewDatabaseFile::UpdateFileInfo()
 
 void NewDatabaseFile::NewFilePathAndId()
 {
-    QString Fields = Selected_Field_names.values().join("-");
-    QString Chapters = Selected_Chapters_names.values().join("-");
-    QString Sections = Selected_Sections_names.values().join("-");
+    // QString Fields = Selected_Field_names.values().join("-");
+    // QString Chapters = Selected_Chapters_names.values().join("-");
+    // QString Sections = Selected_Sections_names.values().join("-");
+    QString Field = Selected_Field_names.values()[0];
+    QString Chapter = Selected_Chapters_names.values()[0];
+    QString Section = Selected_Sections_names.values()[0];
+    QString subSection = Selected_SubSections_names.values()[0];
     QString FieldId = Selected_Field_ids.values().join("");
     QString ChapterId = Selected_Chapters_ids.values().join("");
     QString SectionId = Selected_Sections_ids.values().join("");
-    QString Path = DataBase_Path+Fields+QDir::separator()+Chapters+QDir::separator()+Sections+QDir::separator()+FileType.FolderName+QDir::separator();
+    QString Path = DataBase_Path+Field+QDir::separator()+Chapter+QDir::separator()+Section+QDir::separator()+subSection+QDir::separator()+FileType.FolderName+QDir::separator();
     QString prefix;// = SqlFunctions::Get_String_From_Query(QString("SELECT Prefix FROM DataBases WHERE FileName = '%1'").arg(QFileInfo(currentbase.databaseName()).baseName()),DataTex::DataTeX_Settings);
-    prefix = (!prefix.isEmpty() && !prefix.isNull()) ? prefix+"-" : QString() ;
+    prefix = (!prefix.isEmpty() && !prefix.isNull()) ? prefix+"-" : QString();
     QString fileId = prefix+FieldId+"-"+ChapterId+"-"+SectionId+"-"+FileType.Id;
     QStringList ExistingFiles = SqlFunctions::Get_StringList_From_Query(
                 QString("SELECT Id FROM Database_Files WHERE Id LIKE \"%%1%\"").arg(fileId),currentbase);
@@ -1003,3 +1009,5 @@ void NewDatabaseFile::setFinishButton(bool isLast)
         ui->NextButton->setText(tr("Next"));
     }
 }
+
+

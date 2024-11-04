@@ -149,6 +149,7 @@ struct DTXFile {
     DTXSubSections SubSections;
     int Difficulty = 0;
     QString Path = QString();
+    QStringList linkPaths = QStringList();
     QDateTime Date = QDateTime();
     DTXSolutionState Solved;
     QString Bibliography = QString();
@@ -172,6 +173,7 @@ struct DTXFile {
     QStringList getIds(DTXSubSections subSections);
 
     QList<QStringList> setRecordList(QString querytext,QSqlDatabase database);
+    QStringList getAllFilePaths();
 
     DTXFile();
     DTXFile(QString fileId,QSqlDatabase database);
@@ -484,6 +486,7 @@ public:
     static DTXFile *CreateSolutionData(DTXFile * fileInfo,QSqlDatabase database);
     static QString CreateSolutionPath(DTXFile * fileInfo, QSqlDatabase database);
     static QString PrintSolutionState(DTXSolutionState state);
+
 };
 
 #endif // FILECOMMANDS_H

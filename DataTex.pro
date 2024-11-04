@@ -44,6 +44,8 @@ include(quazip/quazip.pri)
 include(custom_widgets/customwidgets.pri)
 include(pdfviewer/qpdfviewer.pri)
 include(qtsingleapplication/qtsingleapplication.pri)
+CONFIG+=fontAwesomeFree
+include(QtAwesome/QtAwesome/QtAwesome.pri)
 #include(SingleApplication/singleapplication.pri)
 #include(pdfviewer/pdfviewer.pri)
 # include(pdfium/pdfium.pri)

@@ -170,8 +170,10 @@ struct DTXDatabaseInfo
     QString Id;
     QString Name;
     QString Path;
+
     DTXDatabaseType Type;
     DTXDatabase getDTXDatabase();
+    void setDBInfo(DTXDatabase database);
 };
 
 

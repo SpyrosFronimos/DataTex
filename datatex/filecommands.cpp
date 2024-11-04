@@ -405,6 +405,35 @@ void DTXFile::WriteDTexFile()
     newDBFile.close();
 }
 
+QStringList DTXFile::getAllFilePaths()
+{
+    QStringList list;
+    // for(QString field:file.Field.Id){
+    for(auto chapter = Chapters.cbegin(), end = Chapters.cend() ; chapter != end ; chapter++){
+        if(Field.Id == chapter->fieldId){
+            for(auto section = Sections.cbegin(), end = Sections.cend() ; section != end ; section++){
+                if(chapter->id == section->chapterId){
+                    for(auto subSection = SubSections.cbegin(), end = SubSections.cend() ; subSection != end ; subSection++){
+                        if(section->id == subSection->sectionId){
+                            QString path = QFileInfo(Database.Path).absolutePath();
+                            path += QDir::separator()+Field.Name+QDir::separator();
+                            path += chapter->name+QDir::separator()+section->name+QDir::separator()+subSection->name+QDir::separator()+FileType.FolderName+QDir::separator();
+                            path += Id+".tex";
+                            if(path != Path){
+                                linkPaths.append(path);
+                                list.append(path);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+    // }
+    qDebug()<<list;
+    return list;
+}
+
 DTXDocument::DTXDocument()
 {
 
@@ -930,6 +959,15 @@ void FileCommands::AddNewFileToDatabase(DTXFile * fileInfo,QSqlDatabase database
     writeContent.flush();
     writeContent << fileInfo->Content;
     file.close();
+
+    for (QString path:fileInfo->getAllFilePaths()) {
+        QDir dir(QFileInfo(path).absolutePath());
+        if (!dir.exists()) dir.mkpath(".");
+        QProcess process;
+        process.start("ln",QStringList()<<"-s"<<fileInfo->Path << path);
+        process.waitForBytesWritten();
+        process.waitForFinished(-1);
+    }
 
     // Write metadata to dtex and csv files
     CsvFunctions::WriteDataToCSV(fileInfo->Path,DataTex::CurrentFilesDataBase.Database);

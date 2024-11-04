@@ -552,3 +552,9 @@ DTXDatabase DTXDatabaseInfo::getDTXDatabase()
     }
 }
 
+void DTXDatabaseInfo::setDBInfo(DTXDatabase database)
+{
+    Id = database.BaseName;
+    Name = database.Description;
+    Path = database.Path;
+}

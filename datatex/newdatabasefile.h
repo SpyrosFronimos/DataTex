@@ -98,7 +98,6 @@ private slots:
     void on_removeSubSection_clicked();
     void EditModeIsEnabled();
     void CloneModeIsEnabled(int cloneMode);
-
     void on_addFileType_clicked();
     void on_removeFileType_clicked();
     void FileTypeClicked();

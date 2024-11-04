@@ -1,4 +1,5 @@
 #include "datatex.h"
+#include "QtAwesome.h"
 #include "ui_datatex.h"
 #include <QScreen>
 #include <QtWidgets>
@@ -43,6 +44,7 @@
 // QSqlDatabase DataTex::Bibliography_Settings = QSqlDatabase::addDatabase("QSQLITE","BibSettings");
 //QSqlDatabase DataTex::CTANPackages = QSqlDatabase::addDatabase("QSQLITE","CTANPackages");
 //QHash<QString,QSqlDatabase> DataTex::GlobalDatabaseList;
+fa::QtAwesome* awesome = new fa::QtAwesome(qApp);
 
 QHash<QString,DTXDatabase> DataTex::GlobalDatabaseList;
 DTXDatabase DataTex::CurrentFilesDataBase;
@@ -170,6 +172,9 @@ DataTex::DataTex(QWidget *parent)
     });
     ui->ShowFolderView->setChecked(true);
 
+
+    awesome->initFontAwesome();     // This line is important as it loads the font and initializes the named icon map
+    awesome->setDefaultOption("color", QColor(255, 255, 255));
     //---------------
     //Move menu panel
     connect(ui->MenuPosition,&QPushButton::toggled,this,[=](bool checked){
@@ -611,7 +616,8 @@ void DataTex::setDefaultAction(QAction* action)
 void DataTex::CreateMenus_Actions()
 {//---------- File Menu - Database actions ---------------------------
     FileMenu = menuBar()->addMenu(tr("File"));
-    NewDatabasefile = CreateNewAction(FileMenu,NewDatabasefile,SLOT(CreateDatabase()),"Ctrl+N",QIcon::fromTheme("DatabaseAdd"),tr("&Create a new database"));
+    NewDatabasefile = CreateNewAction(FileMenu,NewDatabasefile,SLOT(CreateDatabase()),"Ctrl+N",awesome->icon(fa::fa_solid, fa::fa_database),tr("&Create a new database"));
+    // NewDatabasefile = CreateNewAction(FileMenu,NewDatabasefile,SLOT(CreateDatabase()),"Ctrl+N",QIcon::fromTheme("DatabaseAdd"),tr("&Create a new database"));
     OpenDatabasefile = CreateNewAction(FileMenu,OpenDatabasefile,SLOT(OpenLoadDatabase()),"Ctrl+O",QIcon::fromTheme("DatabaseOpen"),tr("&Open a database"));
     CloseDatabasefile = CreateNewAction(FileMenu,CloseDatabasefile,SLOT(RemoveCurrentDatabase()),"Ctrl+E",QIcon::fromTheme("EditDelete"),tr("&Close current database"));
     SyncDatabasefile = CreateNewAction(FileMenu,SyncDatabasefile,SLOT(DatabaseSyncFiles()),"Ctrl+S",QIcon::fromTheme("UpdateDocument"),tr("&Sync files to database"));
